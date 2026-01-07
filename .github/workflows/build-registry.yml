@@ -30,7 +30,7 @@ jobs:
 
       - name: Build registry (zips + patches.json)
         env:
-          AETHERCORE_REPO_USER: SEU_USER
+          AETHERCORE_REPO_USER: AsafViana
           AETHERCORE_REPO_NAME: aethercore-patches
           AETHERCORE_REPO_BRANCH: main
         run: |
