@@ -6,6 +6,12 @@
     "download_url": "https://raw.githubusercontent.com/AsafViana/aethercore-patches/main/dist/echo_patch-0.1.0.zip"
   },
   {
+    "name": "installer",
+    "version": "0.1.0",
+    "description": "Gerenciador de patches para AetherCore.",
+    "download_url": "https://raw.githubusercontent.com/AsafViana/aethercore-patches/main/dist/installer-0.1.0.zip"
+  },
+  {
     "name": "notes_patch",
     "version": "0.1.0",
     "description": "Patch MCP simples para gerenciar notas locais em texto.",
