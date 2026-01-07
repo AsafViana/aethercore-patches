@@ -1,53 +1,71 @@
-name: Build registry
+name: Build Registry
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    paths:
+      - 'patches/**'
+      - 'scripts/build_registry.py'
+  workflow_dispatch:
 
 jobs:
   build-registry:
     runs-on: ubuntu-latest
-
+    
     permissions:
-      contents: write   # necessário para commitar de volta
-
+      contents: write
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-
+          python-version: '3.11'
+          cache: 'pip'
+      
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pyyaml
-
-      - name: Build registry (zips + patches.json)
+      
+      - name: Build registry (ZIPs + patches.json)
         env:
           AETHERCORE_REPO_USER: AsafViana
           AETHERCORE_REPO_NAME: aethercore-patches
           AETHERCORE_REPO_BRANCH: main
         run: |
           python scripts/build_registry.py
-
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "✅ Nenhuma alteração detectada"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "🔄 Mudanças detectadas em dist/ e generated/"
+          fi
+      
       - name: Commit and push changes
+        if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
           git add dist generated
-
-          # Se não houver mudanças, não faz commit
-          if git diff --cached --quiet; then
-            echo "Nenhuma alteração para commitar."
-            exit 0
-          fi
-
-          git commit -m "chore: update dist and patches.json [ci skip]"
+          git commit -m "chore: update dist and patches.json [skip ci]"
           git push
+      
+      - name: Summary
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          echo "### ✅ Registry Atualizado" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**ZIPs gerados:**" >> $GITHUB_STEP_SUMMARY
+          ls -lh dist/*.zip | awk '{print "- " $9 " (" $5 ")"}' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**patches.json:** generated/patches.json" >> $GITHUB_STEP_SUMMARY
