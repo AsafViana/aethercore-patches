@@ -1,0 +1,46 @@
+name: Auto-update Submodules
+
+on:
+  # Executa a cada 6 horas
+  schedule:
+    - cron: '0 */6 * * *'
+  
+  # Ou executa quando você disparar manualmente
+  workflow_dispatch:
+  
+  # Ou quando receber um webhook do repo do patch
+  repository_dispatch:
+    types: [submodule-updated]
+
+jobs:
+  update-submodules:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout com submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Atualizar submodules
+        run: |
+          git submodule update --remote --merge
+          
+      - name: Verificar se houve mudanças
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit e push se houver mudanças
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore: Update submodules to latest versions"
+          git push
