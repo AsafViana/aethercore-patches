@@ -16,19 +16,17 @@ jobs:
       contents: write
     
     steps:
-      - name: Checkout
-  uses: actions/checkout@v4
-  with:
-    fetch-depth: 0
-    token: ${{ secrets.GITHUB_TOKEN }}
-    submodules: recursive  # ← ADICIONAR ESTA LINHA
-
+      - name: Checkout with submodules
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: recursive  # ← FUNDAMENTAL: busca todos os submodules
       
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          # REMOVIDO: cache: 'pip' (causa erro se não houver requirements.txt na raiz)
       
       - name: Install dependencies
         run: |
@@ -39,6 +37,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Debug - List patches
+        run: |
+          echo "📁 Patches disponíveis:"
+          ls -la patches/
+          echo ""
+          echo "📝 Verificando manifests:"
+          find patches -name "manifest.yaml" -type f
       
       - name: Build registry (ZIPs + patches.json)
         env:
