@@ -1,0 +1,8 @@
+name: "echo_patch"
+version: "0.1.0"
+transport: "stdio"
+entrypoint:
+  command: "python3"
+  args:
+    - "patches/echo_patch/server.py"
+tools_namespace: "debug"
