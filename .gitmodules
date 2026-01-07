@@ -1,0 +1,14 @@
+[submodule "patches/installer"]
+	path = patches/installer
+	url = https://github.com/AsafViana/AetherCore-patch-installer.git
+	branch = main
+
+[submodule "patches/echo"]
+	path = patches/echo
+	url = https://github.com/AsafViana/echo-patch.git
+	branch = main
+
+[submodule "patches/notes"]
+	path = patches/notes
+	url = https://github.com/AsafViana/notes-patch.git
+	branch = main
