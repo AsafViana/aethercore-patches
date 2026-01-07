@@ -20,17 +20,23 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
+          # REMOVIDO: cache: 'pip' (causa erro se não houver requirements.txt na raiz)
       
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pyyaml
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
       
       - name: Build registry (ZIPs + patches.json)
         env:
@@ -43,6 +49,7 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
+          git add dist generated
           if git diff --cached --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "✅ Nenhuma alteração detectada"
@@ -54,9 +61,6 @@ jobs:
       - name: Commit and push changes
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dist generated
           git commit -m "chore: update dist and patches.json [skip ci]"
           git push
       
@@ -66,6 +70,8 @@ jobs:
           echo "### ✅ Registry Atualizado" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**ZIPs gerados:**" >> $GITHUB_STEP_SUMMARY
-          ls -lh dist/*.zip | awk '{print "- " $9 " (" $5 ")"}' >> $GITHUB_STEP_SUMMARY
+          if ls dist/*.zip 1> /dev/null 2>&1; then
+            ls -lh dist/*.zip | awk '{print "- " $9 " (" $5 ")"}'  >> $GITHUB_STEP_SUMMARY
+          fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**patches.json:** generated/patches.json" >> $GITHUB_STEP_SUMMARY
