@@ -10,7 +10,7 @@ from typing import List
 import yaml  # PyYAML
 
 
-REPO_USER = os.environ.get("AETHERCORE_REPO_USER", "SEU_USER")
+REPO_USER = os.environ.get("AETHERCORE_REPO_USER", "AsafViana")
 REPO_NAME = os.environ.get("AETHERCORE_REPO_NAME", "aethercore-patches")
 BRANCH = os.environ.get("AETHERCORE_REPO_BRANCH", "main")
 
