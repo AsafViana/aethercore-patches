@@ -6,10 +6,10 @@
     "download_url": "https://raw.githubusercontent.com/AsafViana/aethercore-patches/main/dist/echo_patch-0.1.0.zip"
   },
   {
-    "name": "notes_patch",
+    "name": "mqtt",
     "version": "0.1.0",
-    "description": "Patch MCP simples para gerenciar notas locais em texto.",
-    "download_url": "https://raw.githubusercontent.com/AsafViana/aethercore-patches/main/dist/notes_patch-0.1.0.zip"
+    "description": "Bridge MQTT para o AetherCore, permitindo publicar e ler mensagens de um microcontrolador Wi‑Fi (ESP32/ESP8266 etc.) via MCP. [web:32]",
+    "download_url": "https://raw.githubusercontent.com/AsafViana/aethercore-patches/main/dist/mqtt-0.1.0.zip"
   },
   {
     "name": "installer",
