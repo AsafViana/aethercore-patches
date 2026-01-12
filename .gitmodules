@@ -12,3 +12,6 @@
 	path = patches/notes
 	url = https://github.com/AsafViana/notes-patch.git
 	branch = main
+[submodule "patches/mqtt"]
+	path = patches/mqtt
+	url = https://github.com/AsafViana/mqtt-conection.git
