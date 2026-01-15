@@ -1,8 +1,8 @@
-name: "echo_patch"
+name: "echo"
 version: "0.1.0"
 transport: "stdio"
 entrypoint:
   command: "python3"
   args:
-    - "patches/echo_patch/server.py"
+    - "patches/echo/server.py"
 tools_namespace: "debug"

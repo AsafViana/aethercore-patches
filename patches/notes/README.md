@@ -1,4 +1,4 @@
-# notes_patch
+# notes
 
 Patch MCP simples para gerenciar notas locais em texto.
 
