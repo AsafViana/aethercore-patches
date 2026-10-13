@@ -1,0 +1,13 @@
+{
+  "hooks": [
+    {
+      "id": "dotnet-pre-commit-validation",
+      "name": ".NET Pre-Commit Validation",
+      "description": "Valida código gerado pelo Kiro antes de escrever",
+      "eventType": "preToolUse",
+      "hookAction": "askAgent",
+      "toolTypes": "write",
+      "outputPrompt": "Antes de escrever este código, valide as regras absolutas do projeto .NET:\n\n## BLOQUEAR se encontrar:\n- Secrets, tokens ou connection strings hardcoded\n- Console.WriteLine ou Debug.WriteLine (usar ILogger)\n- Código comentado (remover antes de commitar)\n- TODO/FIXME sem número de issue (formato: TODO(TASK-123))\n- Uso de .Result, .Wait() ou GetAwaiter().GetResult()\n- catch(Exception) vazio ou que apenas faz rethrow sem contexto\n- DateTime.Now (usar DateTime.UtcNow ou IDateTimeProvider)\n- Campos públicos em classes (usar propriedades)\n- Retorno de null em métodos que retornam IEnumerable/List (retornar vazio)\n- Entidade de domínio como retorno de controller (usar DTO/record)\n- new() para instanciar serviços (usar DI)\n- Thread.Sleep() (usar Task.Delay se necessário)\n\n## ALERTAR (não bloquear):\n- Método com mais de 30 linhas\n- Classe com mais de 300 linhas\n- Mais de 5 parâmetros em construtor (considerar refatorar)\n- Falta de CancellationToken em método async\n- Query EF sem .AsNoTracking() em cenário read-only\n\nSe encontrar violações bloqueantes, recuse a escrita e explique o motivo com a correção sugerida."
+    }
+  ]
+}

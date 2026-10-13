@@ -148,6 +148,49 @@ Variaveis de ambiente suportadas:
 - `AETHERCORE_REPO_NAME`
 - `AETHERCORE_REPO_BRANCH`
 
+## CLI installer (para usuarios finais)
+
+Este repo inclui um CLI independente para instalar patches sem precisar do AetherCore.
+O CLI usa apenas Python e gera um arquivo `.pyz` (zipapp).
+
+### Build do CLI
+
+```bash
+python scripts/build_cli.py
+```
+
+Saida: `dist/cli/aethercore-installer.pyz`
+
+### Instalacao no Windows
+
+```powershell
+.\install\windows\install.ps1
+```
+
+Isso copia o `.pyz` para `%LOCALAPPDATA%\AetherCoreInstaller` e adiciona um
+launcher `aethercore-installer` no PATH do usuario.
+
+### Instalacao no Linux
+
+```bash
+./install/linux/install.sh
+```
+
+Isso copia o `.pyz` para `~/.local/share/aethercore-installer` e cria o
+launcher `~/.local/bin/aethercore-installer`.
+
+### Uso do CLI
+
+```bash
+aethercore-installer list-remote
+aethercore-installer list-installed
+aethercore-installer install notes
+aethercore-installer update notes
+aethercore-installer uninstall notes
+```
+
+Opcional: definir `AETHERCORE_PATCHES_DIR` para escolher onde os patches ficam.
+
 ## Criando um novo patch
 
 1) Crie uma pasta em `patches/<meu_patch>/`.

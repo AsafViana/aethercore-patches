@@ -1,0 +1,22 @@
+{
+  "hooks": [
+    {
+      "id": "dotnet-on-save-review",
+      "name": ".NET Save Review",
+      "description": "Verifica padrões .NET ao salvar arquivos C#",
+      "eventType": "fileEdited",
+      "hookAction": "askAgent",
+      "filePatterns": "**/*.cs",
+      "outputPrompt": "Revise o arquivo salvo e verifique:\n1. Imports não utilizados (using statements)\n2. Uso de 'var' onde o tipo não é óbvio\n3. Métodos async sem sufixo 'Async'\n4. Uso de .Result ou .Wait() em código async\n5. Campos públicos (devem ser propriedades)\n6. Catch vazio ou genérico sem tratamento\n7. DateTime.Now ao invés de DateTime.UtcNow\n8. Console.WriteLine ou Debug.WriteLine\n9. Entidades de domínio expostas diretamente (sem DTO)\n10. Métodos com mais de 30 linhas\n\nSe encontrar problemas, sugira correções inline de forma concisa. Não bloqueie, apenas sugira."
+    },
+    {
+      "id": "dotnet-csproj-review",
+      "name": "Project File Review",
+      "description": "Verifica alterações em arquivos de projeto",
+      "eventType": "fileEdited",
+      "hookAction": "askAgent",
+      "filePatterns": "**/*.csproj",
+      "outputPrompt": "Revise o arquivo .csproj alterado e verifique:\n1. Pacotes com versão floating (sem pin exato)\n2. Pacotes deprecated ou com vulnerabilidades conhecidas\n3. TargetFramework consistente com o padrão do projeto (.NET 8)\n4. PackageReference duplicados\n\nSugira correções se encontrar problemas."
+    }
+  ]
+}
